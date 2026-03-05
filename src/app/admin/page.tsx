@@ -317,14 +317,14 @@ export default function AdminPage() {
                                         {/* Mobile layout: vertical stack */}
                                         <div className="flex sm:hidden flex-col p-4 gap-2.5">
                                             {/* Row 1: photo + full name */}
-                                            <div className="flex items-start gap-3">
+                                            <div className="flex items-center gap-3">
                                                 {p.fotos?.[0] && (
                                                     <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-slate-100">
                                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                                         <img src={p.fotos[0]} alt={p.modelo} className="w-full h-full object-cover" />
                                                     </div>
                                                 )}
-                                                <p className="font-semibold text-slate-800 text-sm leading-snug pt-0.5">
+                                                <p className="font-semibold text-slate-800 text-sm leading-snug">
                                                     {p.modelo} {p.capacidad}
                                                     <span className="font-normal text-slate-400"> · {p.color}</span>
                                                 </p>
