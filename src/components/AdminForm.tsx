@@ -192,7 +192,7 @@ export default function AdminForm({ editProduct, onSuccess }: AdminFormProps) {
         "w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition";
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5 pb-6 sm:pb-0">
             {/* Modelo + Color */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

@@ -196,7 +196,7 @@ export default function AdminPage() {
                 <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
                     <span className="font-semibold text-slate-800 text-sm">
                         Digico<span className="text-sky-500">World</span>{" "}
-                        <span className="text-slate-400 font-normal">Admin</span>
+                        <span className="text-slate-400 font-normal hidden sm:inline">Admin</span>
                     </span>
                     <div className="flex items-center gap-2">
                         <button
@@ -204,7 +204,7 @@ export default function AdminPage() {
                             className="flex items-center gap-1.5 bg-slate-900 text-white text-xs font-medium px-3 py-2 rounded-xl hover:bg-slate-700 transition-colors"
                         >
                             <Plus className="w-3.5 h-3.5" />
-                            Nuevo iPhone
+                            <span className="hidden sm:inline">Nuevo iPhone</span>
                         </button>
                         <button
                             onClick={() => { sessionStorage.removeItem("dw_admin"); setAuthed(false); }}
@@ -216,8 +216,8 @@ export default function AdminPage() {
                     </div>
                 </div>
 
-                {/* Tabs */}
-                <div className="max-w-5xl mx-auto px-4 flex gap-1 pb-2">
+                {/* Tabs — desktop only (mobile tabs are at bottom) */}
+                <div className="max-w-5xl mx-auto px-4 gap-1 pb-2 hidden sm:flex">
                     {(["stock", "stats", "etiquetas"] as const).map((tab) => (
                         <button
                             key={tab}
@@ -234,7 +234,23 @@ export default function AdminPage() {
                 </div>
             </div>
 
-            <div className="max-w-5xl mx-auto px-4 py-8">
+            {/* Mobile bottom tab bar */}
+            <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-100 flex">
+                {(["stock", "stats", "etiquetas"] as const).map((tab) => (
+                    <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`flex-1 flex flex-col items-center justify-center gap-1 py-3 text-xs font-medium transition-colors ${activeTab === tab ? "text-slate-900" : "text-slate-400"
+                            }`}
+                    >
+                        {tab === "stock" ? <List className="w-5 h-5" /> : tab === "stats" ? <BarChart2 className="w-5 h-5" /> : <Tag className="w-5 h-5" />}
+                        <span className="text-[10px]">{tab === "stock" ? "Stock" : tab === "stats" ? "Stats" : "Etiquetas"}</span>
+                        {activeTab === tab && <span className="absolute bottom-0 w-6 h-0.5 bg-slate-900 rounded-full" />}
+                    </button>
+                ))}
+            </div>
+
+            <div className="max-w-5xl mx-auto px-4 py-6 pb-24 sm:pb-8">
                 {/* Form Modal */}
                 <AnimatePresence>
                     {showForm && (
@@ -250,7 +266,7 @@ export default function AdminPage() {
                                 animate={{ y: 0, opacity: 1 }}
                                 exit={{ y: 60, opacity: 0 }}
                                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                                className="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6"
+                                className="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-5 sm:p-6"
                             >
                                 <div className="flex items-center justify-between mb-6">
                                     <h2 className="font-bold text-slate-800">
@@ -296,57 +312,80 @@ export default function AdminPage() {
                                     <motion.div
                                         key={p.id}
                                         layout
-                                        className={`bg-white rounded-2xl border p-4 flex items-center gap-4 transition-opacity ${p.vendido ? "opacity-50 border-slate-100" : "border-slate-100"
-                                            }`}
+                                        className={`bg-white rounded-2xl border transition-opacity ${p.vendido ? "opacity-50 border-slate-100" : "border-slate-100"}`}
                                     >
-                                        {p.fotos?.[0] && (
-                                            <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-slate-100">
-                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img src={p.fotos[0]} alt={p.modelo} className="w-full h-full object-cover" />
-                                            </div>
-                                        )}
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2">
-                                                <p className="font-semibold text-slate-800 text-sm truncate">
-                                                    {p.modelo} {p.capacidad} · {p.color}
+                                        {/* Mobile layout: vertical stack */}
+                                        <div className="flex sm:hidden flex-col p-4 gap-2.5">
+                                            {/* Row 1: photo + full name */}
+                                            <div className="flex items-start gap-3">
+                                                {p.fotos?.[0] && (
+                                                    <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-slate-100">
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                        <img src={p.fotos[0]} alt={p.modelo} className="w-full h-full object-cover" />
+                                                    </div>
+                                                )}
+                                                <p className="font-semibold text-slate-800 text-sm leading-snug pt-0.5">
+                                                    {p.modelo} {p.capacidad}
+                                                    <span className="font-normal text-slate-400"> · {p.color}</span>
                                                 </p>
+                                            </div>
+                                            {/* Row 2: badges */}
+                                            <div className="flex flex-wrap gap-1.5">
+                                                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">{p.estado}</span>
                                                 {p.etiqueta && (
-                                                    <span
-                                                        className="text-xs font-semibold px-2 py-0.5 rounded-full shrink-0"
-                                                        style={{ backgroundColor: p.etiqueta.color + "25", color: p.etiqueta.color }}
-                                                    >
+                                                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ backgroundColor: p.etiqueta.color + "25", color: p.etiqueta.color }}>
                                                         {p.etiqueta.nombre}
                                                     </span>
                                                 )}
                                             </div>
-                                            <div className="flex items-center gap-2 mt-1">
+                                            {/* Row 3: price + battery */}
+                                            <div className="flex items-center gap-2">
                                                 <span className="text-xs font-semibold text-sky-600">${p.precio_usd} USD</span>
                                                 <span className="text-xs text-slate-300">·</span>
                                                 <span className="text-xs text-slate-500">Batería {p.salud_bateria}%</span>
                                             </div>
+                                            {/* Row 4: action buttons full width */}
+                                            <div className="flex gap-2 pt-1 border-t border-slate-50">
+                                                <button onClick={() => { setEditProduct(p); setShowForm(true); }} className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl bg-sky-50 text-sky-500 text-xs font-medium">
+                                                    <Pencil className="w-3.5 h-3.5" /> Editar
+                                                </button>
+                                                <button onClick={() => setPendingSellId(p.id)} className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-medium">
+                                                    <CircleCheckBig className="w-3.5 h-3.5" /> Vendido
+                                                </button>
+                                                <button onClick={() => setPendingDeleteId(p.id)} className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl bg-red-50 text-red-400 text-xs font-medium">
+                                                    <Trash2 className="w-3.5 h-3.5" /> Eliminar
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-1 shrink-0">
-                                            <button
-                                                onClick={() => { setEditProduct(p); setShowForm(true); }}
-                                                className="p-2 rounded-xl bg-sky-50 text-sky-500 hover:bg-sky-100 transition-colors"
-                                                title="Editar"
-                                            >
-                                                <Pencil className="w-4 h-4" />
-                                            </button>
-                                            <button
-                                                onClick={() => setPendingSellId(p.id)}
-                                                className="p-2 rounded-xl bg-emerald-50 text-emerald-500 hover:bg-emerald-100 transition-colors"
-                                                title="Marcar como vendido"
-                                            >
-                                                <CircleCheckBig className="w-4 h-4" />
-                                            </button>
-                                            <button
-                                                onClick={() => setPendingDeleteId(p.id)}
-                                                className="p-2 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 transition-colors"
-                                                title="Eliminar"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
+
+                                        {/* Desktop layout: compact horizontal row */}
+                                        <div className="hidden sm:flex items-center gap-4 p-4">
+                                            {p.fotos?.[0] && (
+                                                <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-slate-100">
+                                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                    <img src={p.fotos[0]} alt={p.modelo} className="w-full h-full object-cover" />
+                                                </div>
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-2">
+                                                    <p className="font-semibold text-slate-800 text-sm truncate">{p.modelo} {p.capacidad} · {p.color}</p>
+                                                    {p.etiqueta && (
+                                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full shrink-0" style={{ backgroundColor: p.etiqueta.color + "25", color: p.etiqueta.color }}>
+                                                            {p.etiqueta.nombre}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <span className="text-xs font-semibold text-sky-600">${p.precio_usd} USD</span>
+                                                    <span className="text-xs text-slate-300">·</span>
+                                                    <span className="text-xs text-slate-500">Batería {p.salud_bateria}%</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-1 shrink-0">
+                                                <button onClick={() => { setEditProduct(p); setShowForm(true); }} className="p-2 rounded-xl bg-sky-50 text-sky-500 hover:bg-sky-100 transition-colors" title="Editar"><Pencil className="w-4 h-4" /></button>
+                                                <button onClick={() => setPendingSellId(p.id)} className="p-2 rounded-xl bg-emerald-50 text-emerald-500 hover:bg-emerald-100 transition-colors" title="Marcar como vendido"><CircleCheckBig className="w-4 h-4" /></button>
+                                                <button onClick={() => setPendingDeleteId(p.id)} className="p-2 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 transition-colors" title="Eliminar"><Trash2 className="w-4 h-4" /></button>
+                                            </div>
                                         </div>
                                     </motion.div>
                                 ))}
