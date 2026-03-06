@@ -21,12 +21,14 @@ import {
     CircleCheckBig,
 } from "lucide-react";
 
-const ADMIN_PASS = process.env.NEXT_PUBLIC_ADMIN_PASSWORD ?? "";
+
 
 export default function AdminPage() {
     const [authed, setAuthed] = useState(false);
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [wrongPass, setWrongPass] = useState(false);
+    const [loginError, setLoginError] = useState("");
+    const [loginLoading, setLoginLoading] = useState(false);
 
     const [products, setProducts] = useState<iPhone[]>([]);
     const [loading, setLoading] = useState(true);
@@ -56,18 +58,23 @@ export default function AdminPage() {
         return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
     }
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (password === ADMIN_PASS) {
-            setAuthed(true);
-            sessionStorage.setItem("dw_admin", "1");
+        setLoginLoading(true);
+        setLoginError("");
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        setLoginLoading(false);
+        if (error) {
+            setLoginError("Email o contraseña incorrectos.");
         } else {
-            setWrongPass(true);
+            setAuthed(true);
         }
     };
 
     useEffect(() => {
-        if (sessionStorage.getItem("dw_admin") === "1") setAuthed(true);
+        supabase.auth.getSession().then(({ data }) => {
+            if (data.session) setAuthed(true);
+        });
     }, []);
 
     useEffect(() => {
@@ -157,7 +164,21 @@ export default function AdminPage() {
                             Tienda <span className="text-sky-500">iPhone</span> Admin
                         </span>
                     </div>
-                    <form onSubmit={handleLogin} className="space-y-4">
+                    <form onSubmit={handleLogin} className="space-y-3">
+                        <div>
+                            <label className="block text-xs font-medium text-slate-500 mb-1.5">
+                                Email
+                            </label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => { setEmail(e.target.value); setLoginError(""); }}
+                                required
+                                autoFocus
+                                placeholder="admin@ejemplo.com"
+                                className={`w-full rounded-2xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 transition ${loginError ? "border-red-300 bg-red-50" : "border-slate-200"}`}
+                            />
+                        </div>
                         <div>
                             <label className="block text-xs font-medium text-slate-500 mb-1.5">
                                 Contraseña
@@ -165,22 +186,22 @@ export default function AdminPage() {
                             <input
                                 type="password"
                                 value={password}
-                                onChange={(e) => { setPassword(e.target.value); setWrongPass(false); }}
+                                onChange={(e) => { setPassword(e.target.value); setLoginError(""); }}
                                 required
-                                autoFocus
                                 placeholder="••••••••"
-                                className={`w-full rounded-2xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 transition ${wrongPass ? "border-red-300 bg-red-50" : "border-slate-200"
-                                    }`}
+                                className={`w-full rounded-2xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 transition ${loginError ? "border-red-300 bg-red-50" : "border-slate-200"}`}
                             />
-                            {wrongPass && (
-                                <p className="text-xs text-red-500 mt-1">Contraseña incorrecta</p>
+                            {loginError && (
+                                <p className="text-xs text-red-500 mt-1">{loginError}</p>
                             )}
                         </div>
                         <button
                             type="submit"
-                            className="w-full bg-slate-900 hover:bg-slate-700 text-white py-3 rounded-2xl text-sm font-medium transition-colors"
+                            disabled={loginLoading}
+                            className="w-full bg-slate-900 hover:bg-slate-700 disabled:opacity-60 text-white py-3 rounded-2xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
                         >
-                            Ingresar
+                            {loginLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                            {loginLoading ? "Verificando..." : "Ingresar"}
                         </button>
                     </form>
                 </motion.div>
@@ -207,7 +228,7 @@ export default function AdminPage() {
                             <span className="hidden sm:inline">Nuevo iPhone</span>
                         </button>
                         <button
-                            onClick={() => { sessionStorage.removeItem("dw_admin"); setAuthed(false); }}
+                            onClick={async () => { await supabase.auth.signOut(); setAuthed(false); }}
                             className="p-2 rounded-xl text-slate-400 hover:bg-slate-100 transition-colors"
                             aria-label="Cerrar sesión"
                         >

@@ -33,7 +33,7 @@ export default function Hero() {
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-slate-500 text-base sm:text-lg mb-8 max-w-md mx-auto leading-relaxed">
+                <p className="text-slate-500 text-base sm:text-lg mb-8 max-w-md mx-auto px-6 leading-relaxed">
                     Catálogo de iPhones nuevos y seminuevos con batería original.
                 </p>
 

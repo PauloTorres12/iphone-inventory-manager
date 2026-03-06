@@ -141,10 +141,7 @@ export default function ProductModal({ product, blueRate, onClose }: ProductModa
                         )}
 
 
-                        {/* Estado + Etiqueta + Close */}
-                        <span className={cn("absolute top-3 left-3 z-10 text-xs font-semibold px-2.5 py-1 rounded-full", estadoBadge[product.estado] || "bg-slate-100 text-slate-600")}>
-                            {product.estado}
-                        </span>
+                        {/* Close button */}
 
                         <button
                             onClick={onClose}
