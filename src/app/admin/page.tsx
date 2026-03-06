@@ -266,23 +266,29 @@ export default function AdminPage() {
                                 animate={{ y: 0, opacity: 1 }}
                                 exit={{ y: 60, opacity: 0 }}
                                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                                className="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-5 sm:p-6"
+                                className="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[92vh] overflow-hidden flex flex-col"
                             >
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="font-bold text-slate-800">
-                                        {editProduct ? "Editar iPhone" : "Nuevo iPhone"}
-                                    </h2>
-                                    <button
-                                        onClick={() => setShowForm(false)}
-                                        className="p-2 rounded-xl hover:bg-slate-100"
-                                    >
-                                        ✕
-                                    </button>
+                                {/* Inner scroll area — overflow-hidden on outer clips scrollbar within rounded corners */}
+                                <div
+                                    className="overflow-y-auto flex-1 p-5 sm:p-6"
+                                    style={{ scrollbarWidth: "thin", scrollbarColor: "#cbd5e1 transparent" }}
+                                >
+                                    <div className="flex items-center justify-between mb-6">
+                                        <h2 className="font-bold text-slate-800">
+                                            {editProduct ? "Editar iPhone" : "Nuevo iPhone"}
+                                        </h2>
+                                        <button
+                                            onClick={() => setShowForm(false)}
+                                            className="p-2 rounded-xl hover:bg-slate-100"
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                    <AdminForm
+                                        editProduct={editProduct}
+                                        onSuccess={() => { setShowForm(false); setEditProduct(null); }}
+                                    />
                                 </div>
-                                <AdminForm
-                                    editProduct={editProduct}
-                                    onSuccess={() => { setShowForm(false); setEditProduct(null); }}
-                                />
                             </motion.div>
                         </motion.div>
                     )}

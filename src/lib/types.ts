@@ -26,4 +26,4 @@ export interface iPhone {
 }
 
 export type EstadoFilter = "Todos" | "Nuevo" | "Usado" | "Outlet";
-export type ModeloFilter = "Todos" | "11" | "12" | "13" | "14" | "15" | "16";
+export type ModeloFilter = "Todos" | "11" | "12" | "13" | "14" | "15" | "16" | "17";

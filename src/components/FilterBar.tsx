@@ -10,7 +10,7 @@ interface FilterBarProps {
     onEstadoChange: (v: EstadoFilter) => void;
 }
 
-const modelos: ModeloFilter[] = ["Todos", "11", "12", "13", "14", "15", "16"];
+const modelos: ModeloFilter[] = ["Todos", "11", "12", "13", "14", "15", "16", "17"];
 const estados: EstadoFilter[] = ["Todos", "Nuevo", "Usado", "Outlet"];
 
 function FilterPill({
