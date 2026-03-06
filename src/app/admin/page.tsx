@@ -154,7 +154,7 @@ export default function AdminPage() {
                             <ShoppingBag className="w-4 h-4 text-white" />
                         </div>
                         <span className="font-semibold text-slate-800">
-                            Digico<span className="text-sky-500">World</span> Admin
+                            Tienda <span className="text-sky-500">iPhone</span> Admin
                         </span>
                     </div>
                     <form onSubmit={handleLogin} className="space-y-4">
@@ -195,7 +195,7 @@ export default function AdminPage() {
             <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
                 <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
                     <span className="font-semibold text-slate-800 text-sm">
-                        Digico<span className="text-sky-500">World</span>{" "}
+                        Tienda <span className="text-sky-500">iPhone</span>{" "}
                         <span className="text-slate-400 font-normal hidden sm:inline">Admin</span>
                     </span>
                     <div className="flex items-center gap-2">

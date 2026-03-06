@@ -29,7 +29,7 @@ export default function Navbar() {
                                 <ShoppingBag className="w-4 h-4 text-white" />
                             </div>
                             <span className="font-semibold text-slate-800 text-sm tracking-tight">
-                                Digico<span className="text-sky-500">World</span>
+                                Tienda <span className="text-sky-500">iPhone</span>
                             </span>
                         </Link>
 

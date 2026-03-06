@@ -22,7 +22,7 @@ export function getBatteryColor(level: number): string {
 export function getWhatsAppLink(modelo: string, precio: number, capacidad: string): string {
     const numero = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "5491112345678";
     const mensaje = encodeURIComponent(
-        `¡Hola! Me interesa el ${modelo} ${capacidad} que vi en DigicoWorld. ¿Está disponible?`
+        `¡Hola! Me interesa el ${modelo} ${capacidad} que vi en Tienda iPhone. ¿Está disponible?`
     );
     return `https://wa.me/${numero}?text=${mensaje}`;
 }

@@ -24,7 +24,7 @@ export default function Home() {
                 className="border-t border-slate-100 py-10 px-4 text-center"
             >
                 <p className="text-slate-400 text-sm">
-                    © {new Date().getFullYear()} DigicoWorld · Todos los derechos reservados
+                    © {new Date().getFullYear()} Tienda iPhone · Todos los derechos reservados
                 </p>
             </footer>
         </main>

@@ -5,11 +5,11 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "DigicoWorld",
+    title: "Tienda iPhone",
     description:
         "Catálogo de iPhones nuevos y seminuevos con batería certificada. Compra segura, envío a todo el país.",
     openGraph: {
-        title: "DigicoWorld — iPhones verificados",
+        title: "Tienda iPhone — iPhones verificados",
         description: "Catálogo de iPhones con batería certificada al mejor precio.",
         type: "website",
     },
